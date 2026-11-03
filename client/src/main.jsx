@@ -1,0 +1,11 @@
+import React from 'react'
+import { createRoot } from 'react-dom/client'
+import App from './App.jsx'
+import About from './About.jsx'
+import ReturnsPolicy from './ReturnsPolicy.jsx'
+import Contact from './Contact.jsx'
+import Privacy from './Privacy.jsx'
+import TrackOrder from './TrackOrder.jsx'
+import './styles.css'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
+createRoot(document.getElementById('root')).render(<React.StrictMode><BrowserRouter><Routes><Route path="/about" element={<About />} /><Route path="/returns" element={<ReturnsPolicy />} /><Route path="/contact" element={<Contact />} /><Route path="/privacy" element={<Privacy />} /><Route path="/track-order" element={<TrackOrder />} /><Route path="*" element={<App />} /></Routes></BrowserRouter></React.StrictMode>)
