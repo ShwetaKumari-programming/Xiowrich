@@ -1,6 +1,21 @@
 import { ArrowRight, Instagram } from 'lucide-react'
+import { useState } from 'react'
 
 export default function Contact() {
+  const [submitted, setSubmitted] = useState(false)
+
+  function submitContactForm(event) {
+    event.preventDefault()
+    const formData = new FormData(event.currentTarget)
+    const name = String(formData.get('name') || '').trim()
+    const email = String(formData.get('email') || '').trim()
+    const message = String(formData.get('message') || '').trim()
+    const subject = `XIOWRICH enquiry from ${name}`
+    const body = `Name: ${name}\nEmail: ${email}\n\n${message}`
+    window.location.href = `mailto:officialxiowrich@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
+    setSubmitted(true)
+  }
+
   return <main className="contact-page">
     <header className="contact-hero">
       <p className="contact-eyebrow">CONTACT US</p>
@@ -15,7 +30,7 @@ export default function Contact() {
       </section>
       <section className="contact-form-section">
         <div><p className="contact-eyebrow">SEND US A MESSAGE</p><h2>We&rsquo;d love to<br/><em>hear from you.</em></h2><p>Have a question? Fill out our contact form, and we&rsquo;ll get back to you.</p><div className="contact-social"><span>FOLLOW US ON INSTAGRAM</span><a href="https://instagram.com/xiowrich" target="_blank" rel="noreferrer"><Instagram size={16}/> @xiowrich <ArrowRight size={15}/></a></div></div>
-        <form className="contact-form" onSubmit={event => event.preventDefault()}><label>Name<input required name="name" placeholder="Your name"/></label><label>Email<input required type="email" name="email" placeholder="Your email"/></label><label>Message<textarea required name="message" rows="5" placeholder="How can we help?"/></label><button className="btn btn-dark" type="submit">SEND MESSAGE <ArrowRight size={16}/></button></form>
+        <form className="contact-form" onSubmit={submitContactForm}><label>Name<input required name="name" placeholder="Your name"/></label><label>Email<input required type="email" name="email" placeholder="Your email"/></label><label>Message<textarea required name="message" rows="5" placeholder="How can we help?"/></label><button className="btn btn-dark" type="submit">SEND MESSAGE <ArrowRight size={16}/></button>{submitted && <p role="status">Your email app should open with your message addressed to our team.</p>}</form>
       </section>
       <footer className="contact-signoff"><p className="contact-eyebrow">XIOWRICH · PARFUMS DE CARACTÈRE</p><h2>Let&rsquo;s talk<br/><em>fragrance.</em></h2></footer>
     </article>
