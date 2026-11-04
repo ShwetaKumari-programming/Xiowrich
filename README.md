@@ -82,6 +82,10 @@ npm run dev:server
 
 ## Environment configuration
 
+The frontend uses `https://xiowrich.vercel.app` as its production API base URL.
+For local development, create `client/.env` from the example to point it at
+the local API:
+
 Copy the server template before configuring optional integrations:
 
 ```bash
@@ -97,6 +101,9 @@ Available server variables:
 | `MONGODB_URI` | MongoDB connection string |
 | `RAZORPAY_KEY_ID` | Razorpay public key |
 | `RAZORPAY_KEY_SECRET` | Razorpay private server secret |
+
+The frontend API variable is `VITE_API_BASE_URL`. It defaults to
+`https://xiowrich.vercel.app` and can be overridden with a local API URL.
 
 Do not commit `server/.env` or expose `RAZORPAY_KEY_SECRET` in frontend code.
 

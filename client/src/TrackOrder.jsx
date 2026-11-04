@@ -1,5 +1,6 @@
 import { Search, CheckCircle2 } from 'lucide-react'
 import { useEffect, useState } from 'react'
+import { API_BASE_URL } from './api'
 
 const stages = [
   ['demo_order_received', 'Order received', 'Your order has been placed with XIOWRICH.'],
@@ -26,7 +27,7 @@ export default function TrackOrder() {
     setError('')
     setOrder(null)
     try {
-      const response = await fetch(`http://localhost:5000/api/orders/${encodeURIComponent(orderId.trim())}`)
+      const response = await fetch(`${API_BASE_URL}/api/orders/${encodeURIComponent(orderId.trim())}`)
       const data = await response.json()
       if (!response.ok) throw new Error(data.error || 'Order not found.')
       setOrder(data)

@@ -1,6 +1,7 @@
 import { ArrowRight, CheckCircle2, Instagram, Menu, Minus, Plus, Search, ShoppingBag, Sparkles, X } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { API_BASE_URL } from './api'
 
 const velourGallery = ['/products/velour-bottle.png', '/products/velour-poster.png', '/products/velour-features.png', '/products/velour-gift-set.png']
 const darkRomanceGallery = ['/products/dark-romance-bottle.png', '/products/dark-romance-features.png', '/products/dark-romance-notes.png', '/products/dark-romance-gift-set.png']
@@ -188,7 +189,7 @@ function App() {
   async function placeOrder() {
     if (!pendingOrderPayload) return
     try {
-      const response = await fetch('http://localhost:5000/api/orders', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ...pendingOrderPayload, paymentMethod }) })
+      const response = await fetch(`${API_BASE_URL}/api/orders`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ...pendingOrderPayload, paymentMethod }) })
       if (response.ok) {
         const orderResult = await response.json()
         setPlacedOrderId(orderResult.orderId)
