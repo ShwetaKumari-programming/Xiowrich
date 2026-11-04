@@ -120,6 +120,10 @@ Do not commit `server/.env` or expose `RAZORPAY_KEY_SECRET` in frontend code.
 The payment endpoints return a configuration error until Razorpay test
 credentials are added to `server/.env`.
 
+The product catalog includes each product's primary image and gallery image
+paths. The API also serves those assets from `/products/<filename>`, allowing
+the frontend to load the complete backend catalog and its images.
+
 ## Production checklist
 
 - Use MongoDB or another persistent database instead of demo memory storage.

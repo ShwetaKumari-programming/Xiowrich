@@ -1,7 +1,7 @@
 import { ArrowRight, CheckCircle2, Instagram, Menu, Minus, Plus, Search, ShoppingBag, Sparkles, X } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { API_BASE_URL } from './api'
+import { API_BASE_URL, resolveApiAsset } from './api'
 
 const velourGallery = ['/products/velour-bottle.png', '/products/velour-poster.png', '/products/velour-features.png', '/products/velour-gift-set.png']
 const darkRomanceGallery = ['/products/dark-romance-bottle.png', '/products/dark-romance-features.png', '/products/dark-romance-notes.png', '/products/dark-romance-gift-set.png']
@@ -31,6 +31,11 @@ defaultProducts.find(product => product.id === 'origin').galleryImages = originG
 defaultProducts.find(product => product.id === 'lady-boss').galleryImages = ladyBossGallery
 defaultProducts.find(product => product.id === 'first-kiss').galleryImages = firstKissGallery
 const money = n => new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(n)
+const normalizeApiProduct = product => ({
+  ...product,
+  image: resolveApiAsset(product.image),
+  galleryImages: product.galleryImages?.map(resolveApiAsset),
+})
 
 function ContactPage() {
   return <section className="contact-page" id="contact">
@@ -120,6 +125,29 @@ function App() {
     setNotice(`${product.name} added to the collection`)
     setTimeout(() => setNotice(''), 2400)
   }
+
+  useEffect(() => {
+    let active = true
+    async function loadProducts() {
+      try {
+        const response = await fetch(`${API_BASE_URL}/api/products`)
+        if (!response.ok) throw new Error('The product catalog could not be loaded.')
+        const backendProducts = await response.json()
+        if (!Array.isArray(backendProducts)) throw new Error('The product catalog response was invalid.')
+        if (active) {
+          const customProducts = JSON.parse(localStorage.getItem('xiowrich-custom-products') || '[]')
+          setProducts([...backendProducts.map(normalizeApiProduct), ...customProducts])
+        }
+      } catch (error) {
+        if (active) {
+          setNotice(error.message || 'The product catalog could not be loaded.')
+          setTimeout(() => setNotice(''), 3500)
+        }
+      }
+    }
+    loadProducts()
+    return () => { active = false }
+  }, [])
 
   useEffect(() => {
     if ((!cartOpen && !checkoutOpen) || cart.length === 0) return
