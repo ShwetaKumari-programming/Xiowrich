@@ -145,5 +145,9 @@ app.post('/api/payments/verify', async (req, res) => {
   res.json({ verified: true, paymentId: razorpay_payment_id, orderId: razorpay_order_id, message: 'Signature verified. Link this verified payment to a persisted order before fulfilment.' })
 })
 
-const port = process.env.PORT || 5000
-app.listen(port, () => console.log(`XIOWRICH API running at http://localhost:${port}`))
+export default app
+
+if (!process.env.VERCEL) {
+  const port = process.env.PORT || 5000
+  app.listen(port, () => console.log(`XIOWRICH API running at http://localhost:${port}`))
+}
