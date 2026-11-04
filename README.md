@@ -129,6 +129,8 @@ the frontend to load the complete backend catalog and its images.
 Vercel is configured to build the React client and serve the Express API from
 the same deployment. The SPA fallback keeps direct visits to `/about`,
 `/contact`, `/privacy`, `/returns`, and `/track-order` from returning 404.
+If the Vercel project still uses `server` as its Root Directory, the
+server-local Vercel configuration and build script provide the same behavior.
 
 - Use MongoDB or another persistent database instead of demo memory storage.
 - Add real shipping, tax, cancellation, refund, privacy, and terms policies.

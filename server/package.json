@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "scripts": { "dev": "node --watch index.js", "start": "node index.js" },
+  "scripts": { "dev": "node --watch index.js", "start": "node index.js", "build": "node build.mjs" },
   "dependencies": {
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
