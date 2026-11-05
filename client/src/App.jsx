@@ -1,42 +1,58 @@
 import { ArrowRight, CheckCircle2, Instagram, Menu, Minus, Plus, Search, ShoppingBag, Sparkles, X } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
-import { Link } from 'react-router-dom'
-import { API_BASE_URL, resolveApiAsset } from './api'
 
-const velourGallery = ['/products/velour-bottle.png', '/products/velour-poster.png', '/products/velour-features.png', '/products/velour-gift-set.png']
+const perfumeImages = [
+  {
+    id: 3,
+    name: "Velour",
+    image: "/products/velour.jpeg",
+  },
+  {
+    id: 4,
+    name: "Deadly Duo",
+    image: "/products/deadly-duo.jpeg",
+  },
+  {
+    id: 5,
+    name: "Man of Culture",
+    image: "/products/man-of-culture.jpeg",
+  },
+]
+perfumeImages.push({ id: 6, name: 'Dark Romance', image: '/products/dark-romance-bottle.png' })
+perfumeImages.push({ id: 7, name: 'One Night', image: '/products/one-night-bottle.png' })
+perfumeImages.push({ id: 8, name: 'Women of Culture', image: '/products/women-of-culture-bottle.png' })
+perfumeImages.push({ id: 9, name: 'Coco Noir', image: '/products/coco-noir-bottle.png' })
+perfumeImages.push({ id: 10, name: 'Lady Boss', image: '/products/lady-boss-bottle.png' })
+perfumeImages.push({ id: 11, name: 'First Kiss', image: '/products/first-kiss-bottle.png' })
+perfumeImages.push({ id: 12, name: 'XIOWRICH Origin', image: '/products/origin-bottle.png' })
+const velourGallery = ['/products/velour-poster.png', '/products/velour-features.png', '/products/velour-gift-set.png', '/products/velour-bottle.png']
 const darkRomanceGallery = ['/products/dark-romance-bottle.png', '/products/dark-romance-features.png', '/products/dark-romance-notes.png', '/products/dark-romance-gift-set.png']
 const oneNightGallery = ['/products/one-night-bottle.png', '/products/one-night-notes.png', '/products/one-night-features.png', '/products/one-night-gift-set.png']
 const womenOfCultureGallery = ['/products/women-of-culture-bottle.png', '/products/women-of-culture-notes.png', '/products/women-of-culture-features.png', '/products/one-night-gift-set.png']
 const cocoNoirGallery = ['/products/coco-noir-bottle.png', '/products/coco-noir-notes.png', '/products/coco-noir-features.png', '/products/coco-noir-gift-set.png']
-const originGallery = ['/products/origin-bottle.png', '/products/origin-poster.png', '/products/origin-features.png', '/products/origin-gift-set.png']
-const ladyBossGallery = ['/products/lady-boss-bottle.png', '/products/lady-boss-poster.png', '/products/lady-boss-features.png', '/products/lady-boss-gift-set.png']
-const firstKissGallery = ['/products/first-kiss-bottle.png', '/products/first-kiss-poster.png', '/products/first-kiss-features.png', '/products/first-kiss-gift-set.png']
-const printPages = Array.from({ length: 8 }, (_, index) => `/a4-prints/page-${String(index + 1).padStart(2, '0')}.jpg`)
 
-const defaultProducts = [
-  { id: 'velour', name: 'Velour', subtitle: 'Softness with a signature', category: 'Women', price: 2199, size: '50 ml', image: '/products/velour.jpeg', tone: 'pink', notes: 'Petals · Rose musk · Vanilla', description: 'A soft, modern floral scent with a warm, velvety finish.' },
-  { id: 'women-of-culture', name: 'Women of Culture', subtitle: 'Grace, unapologetically', category: 'Women', price: 2299, size: '50 ml', image: '/products/women-of-culture-bottle.png', tone: 'rose', notes: 'Saffron · Jasmine · Amberwood', description: 'A floral signature celebrating individuality, poise and presence.' },
-  { id: 'coco-noir', name: 'Coco Noir', subtitle: 'Deep. Warm. Unforgettable.', category: 'Unisex', price: 2699, size: '50 ml', image: '/products/coco-noir-bottle.png', tone: 'brown', notes: 'Milk chocolate · White musk · Cinnamon', description: 'A rich, enveloping scent inspired by the warmth of milk chocolate, white musk and cinnamon.' },
-  { id: 'dark-romance', name: 'Dark Romance', subtitle: 'A little mystery, beautifully worn', category: 'Unisex', price: 2499, size: '50 ml', image: '/products/dark-romance-bottle.png', tone: 'brown', notes: 'Bergamot · Iris · Patchouli', description: 'A warm, sensual signature with bright bergamot, elegant iris and deep patchouli.' },
-  { id: 'one-night', name: 'One Night', subtitle: 'One night. A lasting impression.', category: 'Unisex', price: 2499, size: '50 ml', image: '/products/one-night-bottle.png', tone: 'brown', notes: 'Bergamot · Marine notes · White musk', description: 'A fresh, captivating fragrance that pairs bright bergamot with marine notes and soft white musk.' },
-  { id: 'origin', name: 'XIOWRICH Origin', subtitle: 'Some origins are forever', category: 'Unisex', price: 2499, size: '50 ml', image: '/products/origin-bottle.png', tone: 'brown', notes: 'Amber · Sandalwood · Rose', description: 'A warm, lasting signature with amber, sandalwood and rose.' },
-  { id: 'lady-boss', name: 'Lady Boss', subtitle: 'The art of feminine elegance', category: 'Women', price: 2499, size: '50 ml', image: '/products/lady-boss-bottle.png', tone: 'pink', notes: 'Blackcurrant · Freesia · Ambroxan', description: 'A polished feminine fragrance with luminous florals, rich blackcurrant and a confident modern trail.' },
-  { id: 'first-kiss', name: 'First Kiss', subtitle: 'A memory in the making', category: 'Unisex', price: 2499, size: '50 ml', image: '/products/first-kiss-bottle.png', tone: 'brown', notes: 'Dubai oud · Turkish rose · Saffron', description: 'A romantic, enveloping fragrance where precious oud meets Turkish rose and luminous saffron.' },
+const products = [
+  { id: 'deadly-duo', name: 'Deadly Duo', subtitle: 'The art of contrast', category: 'Unisex', price: 750, mrp: 1799, size: '50 ml', image: '/products/deadly-duo.jpeg', tone: 'black', notes: 'Black amber · Warm woods · Spice', description: 'A confident, magnetic fragrance made for evenings that linger.' },
+  { id: 'velour', name: 'Velour', subtitle: 'Softness with a signature', category: 'Women', price: 600, mrp: 1799, size: '50 ml', image: '/products/velour.jpeg', tone: 'pink', notes: 'Petals · Rose musk · Vanilla', description: 'A soft, modern floral scent with a warm, velvety finish.' },
+  { id: 'women-of-culture', name: 'Women of Culture', subtitle: 'Grace, unapologetically', category: 'Women', price: 800, mrp: 1799, size: '50 ml', image: '/products/women-of-culture-bottle.png', tone: 'rose', notes: 'Saffron · Jasmine · Amberwood', description: 'A floral signature celebrating individuality, poise and presence.' },
+  { id: 'coco-noir', name: 'Coco Noir', subtitle: 'Deep. Warm. Unforgettable.', category: 'Unisex', price: 650, mrp: 1799, size: '50 ml', image: '/products/coco-noir-bottle.png', tone: 'brown', notes: 'Milk chocolate · White musk · Cinnamon', description: 'A rich, enveloping scent inspired by the warmth of milk chocolate, white musk and cinnamon.' },
+  { id: 'man-of-culture', name: 'Man of Culture', subtitle: 'Quiet confidence', category: 'Men', price: 750, mrp: 1799, size: '50 ml', image: '/products/man-of-culture.jpeg', tone: 'burgundy', notes: 'Spiced woods · Amber · Musk', description: 'Refined and composed, with a bold trail that speaks without shouting.' },
+  { id: 'dark-romance', name: 'Dark Romance', subtitle: 'A little mystery, beautifully worn', category: 'Unisex', price: 700, mrp: 1799, size: '50 ml', image: '/products/dark-romance-bottle.png', tone: 'brown', notes: 'Bergamot · Iris · Patchouli', description: 'A warm, sensual signature with bright bergamot, elegant iris and deep patchouli.' },
+  { id: 'one-night', name: 'One Night', subtitle: 'One night. A lasting impression.', category: 'Unisex', price: 700, mrp: 1799, size: '50 ml', image: '/products/one-night-bottle.png', tone: 'brown', notes: 'Bergamot · Marine notes · White musk', description: 'A fresh, captivating fragrance that pairs bright bergamot with marine notes and soft white musk.' },
+  { id: 'lady-boss', name: 'Lady Boss', subtitle: 'The art of feminine elegance', category: 'Women', price: 600, mrp: 1799, size: '50 ml', image: '/products/lady-boss-bottle.png', tone: 'pink', notes: 'Blackcurrant · Freesia · Ambroxan', description: 'A polished feminine fragrance with luminous florals, rich blackcurrant and a confident modern trail.' },
+  { id: 'first-kiss', name: 'First Kiss', subtitle: 'A memory in the making', category: 'Unisex', price: 700, mrp: 1799, size: '50 ml', image: '/products/first-kiss-bottle.png', tone: 'brown', notes: 'Dubai oud · Turkish rose · Saffron', description: 'A romantic, enveloping fragrance where precious oud meets Turkish rose and luminous saffron.' },
+  { id: 'origin', name: 'XIOWRICH Origin', subtitle: 'Some origins are forever', category: 'Unisex', price: 750, mrp: 1799, size: '50 ml', image: '/products/origin-bottle.png', tone: 'brown', notes: 'Amber · Sandalwood · Rose', description: 'A warm, lasting signature with amber, sandalwood and rose.' },
 ]
-defaultProducts.find(product => product.id === 'velour').galleryImages = velourGallery
-defaultProducts.find(product => product.id === 'dark-romance').galleryImages = darkRomanceGallery
-defaultProducts.find(product => product.id === 'one-night').galleryImages = oneNightGallery
-defaultProducts.find(product => product.id === 'women-of-culture').galleryImages = womenOfCultureGallery
-defaultProducts.find(product => product.id === 'coco-noir').galleryImages = cocoNoirGallery
-defaultProducts.find(product => product.id === 'origin').galleryImages = originGallery
-defaultProducts.find(product => product.id === 'lady-boss').galleryImages = ladyBossGallery
-defaultProducts.find(product => product.id === 'first-kiss').galleryImages = firstKissGallery
+products.find(product => product.id === 'velour').galleryImages = velourGallery
+products.find(product => product.id === 'dark-romance').galleryImages = darkRomanceGallery
+products.find(product => product.id === 'one-night').galleryImages = oneNightGallery
+products.find(product => product.id === 'women-of-culture').galleryImages = womenOfCultureGallery
+products.find(product => product.id === 'coco-noir').galleryImages = cocoNoirGallery
+const printPages = [1, 2, 3, 4, 5, 6, 7, 8].map(number => ({
+  number: String(number).padStart(2, '0'),
+  image: `/a4-prints/page-${String(number).padStart(2, '0')}.jpg`,
+}))
 const money = n => new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(n)
-const normalizeApiProduct = product => ({
-  ...product,
-  image: resolveApiAsset(product.image),
-  galleryImages: product.galleryImages?.map(resolveApiAsset),
-})
 
 function ContactPage() {
   return <section className="contact-page" id="contact">
@@ -47,13 +63,6 @@ function ContactPage() {
 }
 
 function App() {
-  const [products, setProducts] = useState(() => {
-    try {
-      return [...defaultProducts, ...JSON.parse(localStorage.getItem('xiowrich-custom-products') || '[]')]
-    } catch {
-      return defaultProducts
-    }
-  })
   const [cart, setCart] = useState(() => JSON.parse(localStorage.getItem('xiowrich-cart') || '[]'))
   const [cartOpen, setCartOpen] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
@@ -63,92 +72,10 @@ function App() {
   const [checkoutOpen, setCheckoutOpen] = useState(false)
   const [galleryIndexes, setGalleryIndexes] = useState({})
   const [orderDone, setOrderDone] = useState(false)
-  const [placedOrderId, setPlacedOrderId] = useState('')
   const [mobileMenu, setMobileMenu] = useState(false)
   const [contactPage, setContactPage] = useState(() => window.location.hash === '#contact')
   const [email, setEmail] = useState('')
   const [customer, setCustomer] = useState({ name: '', phone: '', address: '', city: '', pincode: '' })
-  const [paymentMethod, setPaymentMethod] = useState('upi')
-  const [paymentStep, setPaymentStep] = useState(false)
-  const [pendingOrderPayload, setPendingOrderPayload] = useState(null)
-  const [selectedProduct, setSelectedProduct] = useState(null)
-  const [selectedProductImage, setSelectedProductImage] = useState(0)
-  const [addProductOpen, setAddProductOpen] = useState(false)
-  const [productImagePreview, setProductImagePreview] = useState('')
-  const [productImageError, setProductImageError] = useState('')
-
-  const handleProductImage = event => {
-    const file = event.target.files?.[0]
-    if (!file) return
-    if (!file.type.startsWith('image/')) {
-      setProductImageError('Please choose an image file.')
-      return
-    }
-    if (file.size > 5 * 1024 * 1024) {
-      setProductImageError('Image must be smaller than 5 MB.')
-      return
-    }
-    setProductImageError('')
-    const reader = new FileReader()
-    reader.onload = () => setProductImagePreview(String(reader.result))
-    reader.onerror = () => setProductImageError('Could not read that image. Please try another file.')
-    reader.readAsDataURL(file)
-  }
-
-  const addProduct = event => {
-    event.preventDefault()
-    const form = new FormData(event.currentTarget)
-    if (!productImagePreview) {
-      setProductImageError('Choose a product image before saving.')
-      return
-    }
-    const name = String(form.get('name') || '').trim()
-    const id = `${name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')}-${Date.now()}`
-    const product = {
-      id,
-      name,
-      subtitle: String(form.get('subtitle') || '').trim(),
-      category: String(form.get('category') || 'Unisex'),
-      price: Number(form.get('price')),
-      size: String(form.get('size') || '').trim(),
-      image: productImagePreview,
-      tone: 'brown',
-      notes: String(form.get('notes') || '').trim(),
-      description: String(form.get('description') || '').trim(),
-    }
-    const customProducts = [...products.filter(item => item.custom), { ...product, custom: true }]
-    setProducts([...defaultProducts, ...customProducts])
-    localStorage.setItem('xiowrich-custom-products', JSON.stringify(customProducts))
-    setAddProductOpen(false)
-    setProductImagePreview('')
-    setProductImageError('')
-    event.currentTarget.reset()
-    setNotice(`${product.name} added to the collection`)
-    setTimeout(() => setNotice(''), 2400)
-  }
-
-  useEffect(() => {
-    let active = true
-    async function loadProducts() {
-      try {
-        const response = await fetch(`${API_BASE_URL}/api/products`)
-        if (!response.ok) throw new Error('The product catalog could not be loaded.')
-        const backendProducts = await response.json()
-        if (!Array.isArray(backendProducts)) throw new Error('The product catalog response was invalid.')
-        if (active) {
-          const customProducts = JSON.parse(localStorage.getItem('xiowrich-custom-products') || '[]')
-          setProducts([...backendProducts.map(normalizeApiProduct), ...customProducts])
-        }
-      } catch (error) {
-        if (active) {
-          setNotice(error.message || 'The product catalog could not be loaded.')
-          setTimeout(() => setNotice(''), 3500)
-        }
-      }
-    }
-    loadProducts()
-    return () => { active = false }
-  }, [])
 
   useEffect(() => {
     if ((!cartOpen && !checkoutOpen) || cart.length === 0) return
@@ -178,27 +105,10 @@ function App() {
     setNotice(`${product.name} added to your bag`)
     setTimeout(() => setNotice(''), 2400)
   }
-  const productGallery = product => {
-    const gallery = product.galleryImages?.length ? [...product.galleryImages] : [product.image]
-    products.filter(item => item.id !== product.id && item.category === product.category).forEach(item => {
-      if (gallery.length < 4 && !gallery.includes(item.image)) gallery.push(item.image)
-    })
-    return gallery.slice(0, 4)
-  }
-  const openProduct = product => {
-    setSelectedProduct(product)
-    setSelectedProductImage(0)
-  }
-  const buyNow = product => {
-    const found = cart.find(item => item.id === product.id)
-    saveCart(found ? cart.map(item => item.id === product.id ? { ...item, ...product, qty: item.qty + 1 } : item) : [...cart, { ...product, qty: 1 }])
-    setSelectedProduct(null)
-    setCheckoutOpen(true)
-  }
   const changeQty = (id, amount) => saveCart(cart.map(item => item.id === id ? { ...item, qty: item.qty + amount } : item).filter(item => item.qty > 0))
   const moveGallery = (id, images, direction) => setGalleryIndexes(current => ({ ...current, [id]: ((current[id] || 0) + direction + images.length) % images.length }))
   const GalleryViewer = ({ item, className = '' }) => {
-    const images = productGallery(item)
+    const images = item.galleryImages?.length ? item.galleryImages : products.find(product => product.id === item.id)?.galleryImages || [item.image]
     const index = galleryIndexes[item.id] || 0
     return <div className={`item-gallery ${className}`}>
       <img src={images[index]} alt={`${item.name} image ${index + 1} of ${images.length}`} />
@@ -208,50 +118,36 @@ function App() {
   const subtotal = cart.reduce((sum, item) => sum + item.price * item.qty, 0)
   const filtered = useMemo(() => products.filter(p => (category === 'All' || p.category === category) && `${p.name} ${p.notes} ${p.category}`.toLowerCase().includes(search.toLowerCase())), [category, search])
 
-  function beginPayment(e) {
+  async function placeOrder(e) {
     e.preventDefault()
-    const payload = { customer, email, paymentMethod, items: cart.map(({ id, name, price, qty }) => ({ productId: id, name, price, quantity: qty })), subtotal, shipping: subtotal >= 3000 ? 0 : 99, total: subtotal + (subtotal >= 3000 ? 0 : 99) }
-    setPendingOrderPayload(payload)
-    setPaymentStep(true)
-  }
-
-  async function placeOrder() {
-    if (!pendingOrderPayload) return
+    const payload = { customer, email, items: cart.map(({ id, name, price, qty }) => ({ productId: id, name, price, quantity: qty })), subtotal, shipping: subtotal >= 3000 ? 0 : 99, total: subtotal + (subtotal >= 3000 ? 0 : 99) }
     try {
-      const response = await fetch(`${API_BASE_URL}/api/orders`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ...pendingOrderPayload, paymentMethod }) })
+      const response = await fetch('http://localhost:5000/api/orders', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) })
       if (response.ok) {
-        const orderResult = await response.json()
-        setPlacedOrderId(orderResult.orderId)
         setOrderDone(true)
-        setPaymentStep(false)
-        setPendingOrderPayload(null)
         saveCart([])
-      } else {
-        const errorBody = await response.json().catch(() => ({}))
-        setNotice(errorBody.error || 'Could not create your order. Please try again.')
-        setTimeout(() => setNotice(''), 3500)
-      }
+      } else setNotice('Could not create your order. Please try again.')
     } catch {
-      setNotice('We could not reach checkout. Please check that the store server is running and try again.')
+      setNotice('Start the backend with “npm run dev” to submit a demo order.')
       setTimeout(() => setNotice(''), 3500)
     }
   }
 
   const scrollShop = () => document.getElementById('collection')?.scrollIntoView({ behavior: 'smooth' })
-  return <div className="site-shell"><style>{`.contact-page .contact-hero{display:none}.contact-page .contact-info-grid{padding-top:55px}.contact-page .contact-info-card,.contact-page .contact-form-card,.contact-page .contact-social{display:none}.hero-visual{margin-top:0!important}`}</style>
+  return <div className="site-shell"><style>{`.contact-page .contact-hero{display:none}.contact-page .contact-info-grid{padding-top:55px}.contact-page .contact-info-card,.contact-page .contact-form-card,.contact-page .contact-social{display:none}.hero-visual{margin-top:0!important}.bag-btn{font-weight:700}`}</style>
     <div className="announcement">COMPLIMENTARY SHIPPING ON ORDERS OVER ₹3,000 <span>✦</span> DISCOVER YOUR SIGNATURE</div>
     <header className="header">
       <button className="icon-btn mobile-toggle" onClick={() => setMobileMenu(!mobileMenu)} aria-label="Toggle menu">{mobileMenu ? <X /> : <Menu />}</button>
-      <nav className={`nav-left ${mobileMenu ? 'nav-open' : ''}`}><a href="#collection" onClick={() => setMobileMenu(false)}>SHOP ALL</a><Link to="/about" onClick={() => setMobileMenu(false)}>ABOUT</Link><a href="#ritual" onClick={() => setMobileMenu(false)}>THE RITUAL</a><a href="#prints" onClick={() => setMobileMenu(false)}>A4 PRINTS</a></nav>
+      <nav className={`nav-left ${mobileMenu ? 'nav-open' : ''}`}><a href="#collection" onClick={() => setMobileMenu(false)}>SHOP ALL</a><a href="#about" onClick={() => setMobileMenu(false)}>ABOUT US</a><a href="#ritual" onClick={() => setMobileMenu(false)}>THE RITUAL</a><a href="#prints" onClick={() => setMobileMenu(false)}>PRINTS</a></nav>
       <a className="wordmark" href="#" aria-label="XIOWRICH home">XIOWRICH<span>PARFUMS DE CARACTÈRE</span></a>
-      <div className="header-actions"><button className="add-product-trigger" onClick={() => setAddProductOpen(true)}>ADD PRODUCT</button><button className="icon-btn" aria-label="Search" onClick={() => setSearchOpen(!searchOpen)}><Search size={19}/></button><button className="bag-btn" onClick={() => setCartOpen(true)} aria-label="Open cart"><ShoppingBag size={19}/><span>CART ({cart.reduce((s,i)=>s+i.qty,0)})</span></button></div>
+      <div className="header-actions"><button className="icon-btn" aria-label="Search" onClick={() => setSearchOpen(!searchOpen)}><Search size={19}/></button><button className="bag-btn" onClick={() => setCartOpen(true)} aria-label="Open cart"><ShoppingBag size={19}/><span>CART ({cart.reduce((s,i)=>s+i.qty,0)})</span></button></div>
     </header>
     {searchOpen && <div className="search-strip"><Search size={18}/><input autoFocus placeholder="Search fragrances, notes, moods..." value={search} onChange={e=>{setSearch(e.target.value);scrollShop()}}/><button className="icon-btn" onClick={()=>{setSearchOpen(false);setSearch('')}}><X size={18}/></button></div>}
 
     <main className={contactPage ? 'contact-route' : ''}>
-      {contactPage && <ContactPage />}
+      <ContactPage />
       <section className="hero">
-        <div className="hero-copy"><div className="eyebrow"><span></span> THE ART OF PERSONAL FRAGRANCE</div><h1>A scent that<br/><em>stays with you.</em></h1><p>Considered fragrances for the moments that become memories. Find the scent that feels unmistakably yours.</p><button className="btn btn-dark" onClick={scrollShop}>DISCOVER THE COLLECTION <ArrowRight size={16}/></button></div>
+        <div className="hero-copy"><div className="eyebrow"><span></span> THE ART OF PERSONAL FRAGRANCE</div><h1>A scent that<br/><em>stays with you.</em></h1><p>Considered fragrances for the moments that become memories. Find the scent that feels unmistakably yours.</p><button className="btn btn-dark" onClick={scrollShop}>DISCOVER THE COLLECTION <ArrowRight size={16}/></button><div className="hero-foot"><span>01 / 05</span><span className="hero-line"></span><span>CRAFTED TO BE REMEMBERED</span></div></div>
         <div className="hero-visual"><img src="/products/coco-noir.jpeg" alt="XIOWRICH Coco Noir perfume" /><div className="hero-stamp"><Sparkles size={16}/><span>YOUR<br/>SIGNATURE<br/>AWAITS</span></div><div className="vertical-note">EAU DE PARFUM · XIOWRICH</div></div>
         <div className="hero-side">SCENT IS THE LANGUAGE OF MEMORY.</div>
       </section>
@@ -267,12 +163,12 @@ function App() {
         </div>
 
         <div className="perfume-gallery">
-          {products.map((perfume) => (
+          {perfumeImages.map((perfume) => (
             <div className="perfume-card" key={perfume.id}>
-              <button className="perfume-card-image" type="button" onClick={() => openProduct(perfume)} aria-label={`View ${perfume.name}`}>
-                <img src={perfume.image} alt={perfume.name} loading="lazy" />
-              </button>
-              <button className="btn btn-dark collection-add" onClick={() => addToCart(perfume)}>ADD TO CART <ShoppingBag size={15}/></button>
+              <img src={perfume.image} alt={perfume.name} loading="lazy" />
+              <h3 className="perfume-card-name">{perfume.name}</h3>
+              <div className="perfume-card-prices"><span>{money(products.find(product => product.name === perfume.name).mrp)}</span><strong>{money(products.find(product => product.name === perfume.name).price)}</strong></div>
+              <button className="btn btn-dark collection-add" onClick={() => addToCart(products.find(product => product.name === perfume.name))}>ADD TO CART <ShoppingBag size={15}/></button>
             </div>
           ))}
         </div>
@@ -280,27 +176,15 @@ function App() {
 
       <section className="manifesto" id="story"><div className="manifesto-image"><img src="/products/women-of-culture.jpeg" alt="Women of Culture fragrance surrounded by white flowers"/></div><div className="manifesto-copy"><div className="eyebrow">MORE THAN A FRAGRANCE</div><h2>Leave a little<br/><em>of yourself</em><br/>in every room.</h2><p>We believe fragrance is personal. It is the quiet confidence before a big moment, the memory attached to a familiar note, and the invisible signature that makes a presence unforgettable.</p><a href="#collection" className="text-link">MEET YOUR NEXT SIGNATURE <ArrowRight size={16}/></a><span className="manifesto-mark">X.</span></div></section>
 
+      <section className="about-page" id="about"><div className="about-intro"><div className="eyebrow">ABOUT XIOWRICH</div><h2>Fragrance is the<br/><em>art of becoming.</em></h2><p>We created XIOWRICH for the beautifully individual. For the people who know that a scent can change the way a moment feels, and that the most memorable luxury is the one that becomes completely your own.</p></div><div className="about-details"><div className="about-detail-image"><img src="/products/velour-poster.png" alt="XIOWRICH Velour fragrance artwork" loading="lazy"/></div><div className="about-detail-copy"><div><span>01</span><h3>Made personal</h3><p>Every XIOWRICH fragrance is designed as an invitation, never an instruction. Wear it close, layer it freely, and let it meet the version of you that arrives today.</p></div><div><span>02</span><h3>Considered by design</h3><p>From the first note to the final bottle, we choose character over excess. Our fragrances are expressive, wearable and made to stay with you long after the first impression.</p></div><div><span>03</span><h3>For every presence</h3><p>There is no single way to be unforgettable. Our wardrobe moves from quiet confidence to dark romance, giving every mood a signature of its own.</p></div></div></div><div className="about-signoff"><p>“The best fragrance does not enter the room before you.<br/>It makes people remember that you were there.”</p><span>XIOWRICH · PARFUMS DE CARACTÈRE</span></div></section>
+
       <section className="ritual section-pad" id="ritual"><div className="ritual-top"><div className="eyebrow">THE FRAGRANCE RITUAL</div><h2>Make the everyday <em>extraordinary.</em></h2></div><div className="ritual-grid"><div><span>01</span><h3>Prepare</h3><p>Apply to moisturised skin for a softer, longer-lasting fragrance experience.</p></div><div><span>02</span><h3>Apply</h3><p>Spray on pulse points—wrists, neck, and behind the ears. Let the scent settle naturally.</p></div><div><span>03</span><h3>Remember</h3><p>Give your fragrance a moment to unfold. The best signatures reveal themselves over time.</p></div></div></section>
 
-      <section className="print-gallery section-pad" id="prints"><div className="collection-heading"><p className="eyebrow">THE XIOWRICH PRINT EDIT</p><h2>Explore the <em>collection.</em></h2><p>Browse the complete print collection.</p></div><div className="print-grid">{printPages.map((page, index) => <a className="print-card" href={page} target="_blank" rel="noreferrer" key={page}><img src={page} alt={`XIOWRICH print page ${index + 1}`} /><span>PAGE {String(index + 1).padStart(2, '0')} <ArrowRight size={14}/></span></a>)}</div></section>
+      <section className="print-gallery section-pad" id="prints"><div className="section-heading"><div><div className="eyebrow">THE XIOWRICH COLLECTION</div><h2>Made to <em>linger.</em></h2></div><p>Explore our collection, page by page.<br/>Discover pieces made to stay with you.</p></div><div className="print-grid">{printPages.map(page=><a className="print-card" href={page.image} target="_blank" rel="noreferrer" key={page.number}><img src={page.image} alt={`XIOWRICH collection print ${page.number}`} loading="lazy"/><span><span>PRINT {page.number}</span><ArrowRight size={15}/></span></a>)}</div><div className="print-actions"><a className="print-download" href="/A4%20Prints.pdf" target="_blank" rel="noreferrer">OPEN OUR COLLECTION <ArrowRight size={15}/></a><a className="print-download contact-link" href="#contact">CONTACT US <ArrowRight size={15}/></a></div></section>
 
       <section className="newsletter"><div><div className="eyebrow">LET GOOD THINGS LINGER</div><h2>A note from <em>XIOWRICH.</em></h2><p>New launches, scent stories and considered little luxuries.</p></div><form onSubmit={e=>{e.preventDefault();setNotice('Thank you for joining the XIOWRICH list.');setEmail('');setTimeout(()=>setNotice(''),2500)}}><input type="email" required placeholder="Your email address" value={email} onChange={e=>setEmail(e.target.value)}/><button aria-label="Subscribe"><ArrowRight/></button></form></section>
     </main>
-    <footer className="footer"><div className="footer-main"><div><a className="wordmark footer-logo" href="#">XIOWRICH<span>PARFUMS DE CARACTÈRE</span></a><p>Fragrance for the moments<br/>that make you, you.</p></div><div><h4>EXPLORE</h4><a href="#collection">Shop all</a><a href="/about">About us</a><a href="#ritual">The ritual</a></div><div><h4>CLIENT CARE</h4><a href="/contact">Contact us</a><a href="/returns">Shipping & returns</a><a href="/privacy">Privacy & terms</a></div><div><h4>FOLLOW OUR SCENT</h4><a href="#social"><Instagram size={16}/> Instagram</a><p className="small-note">Replace this demo link with your official social profile.</p></div></div><div className="footer-bottom" id="footer-policy"><span>© 2026 XIOWRICH. ALL RIGHTS RESERVED.</span><span>MADE WITH INTENTION · INDIA</span><span>PRICES IN INR</span></div></footer>
-
-    {selectedProduct && <div className="overlay product-detail-overlay" onMouseDown={event => { if (event.target === event.currentTarget) setSelectedProduct(null) }}><section className="product-detail-modal" role="dialog" aria-modal="true" aria-labelledby="product-detail-title"><button className="icon-btn product-detail-close" type="button" onClick={() => setSelectedProduct(null)} aria-label="Close product details"><X/></button><div className="product-detail-gallery"><img className="product-detail-main-image" src={productGallery(selectedProduct)[selectedProductImage]} alt={`${selectedProduct.name} product view ${selectedProductImage + 1}`} /><div className="product-detail-thumbnails">{productGallery(selectedProduct).map((image, index) => <button type="button" className={index === selectedProductImage ? 'active' : ''} key={`${image}-${index}`} onClick={() => setSelectedProductImage(index)}><img src={image} alt={`${selectedProduct.name} thumbnail ${index + 1}`} /></button>)}</div></div><div className="product-detail-copy"><p className="eyebrow">{selectedProduct.category} · {selectedProduct.size}</p><h2 id="product-detail-title">{selectedProduct.name}</h2><strong className="product-detail-price">{money(selectedProduct.price)}</strong><p className="product-detail-subtitle">{selectedProduct.subtitle}</p><p className="product-detail-description">{selectedProduct.description}</p><p className="product-detail-notes"><span>NOTES</span>{selectedProduct.notes}</p><div className="product-detail-actions"><button className="btn btn-light" type="button" onClick={() => addToCart(selectedProduct)}>ADD TO CART <ShoppingBag size={15}/></button><button className="btn btn-dark" type="button" onClick={() => buyNow(selectedProduct)}>BUY NOW <ArrowRight size={16}/></button></div></div></section></div>}
-
-    {addProductOpen && <div className="overlay" onMouseDown={event => { if (event.target === event.currentTarget) setAddProductOpen(false) }}><section className="add-product-modal" role="dialog" aria-modal="true" aria-labelledby="add-product-title"><div className="drawer-head"><div><div className="eyebrow">YOUR COLLECTION</div><h2 id="add-product-title">Add a product</h2></div><button className="icon-btn" type="button" onClick={() => setAddProductOpen(false)} aria-label="Close add product form"><X/></button></div><form className="add-product-form" onSubmit={addProduct}>
-      <label>Product image<input type="file" accept="image/*" onChange={handleProductImage} required /></label>
-      {productImagePreview && <img className="product-upload-preview" src={productImagePreview} alt="Selected product preview" />}
-      {productImageError && <p className="form-error" role="alert">{productImageError}</p>}
-      <div className="form-pair"><label>Product name<input name="name" required placeholder="e.g. Amber Veil" /></label><label>Category<select name="category" defaultValue="Unisex"><option>Unisex</option><option>Women</option><option>Men</option></select></label></div>
-      <div className="form-pair"><label>Price (INR)<input name="price" type="number" min="1" step="1" required placeholder="2499" /></label><label>Size<input name="size" required placeholder="50 ml" /></label></div>
-      <label>Subtitle<input name="subtitle" required placeholder="A signature worth remembering" /></label>
-      <label>Notes<input name="notes" placeholder="Amber · Woods · Musk" /></label>
-      <label>Description<textarea name="description" rows="3" placeholder="Tell customers about this fragrance." /></label>
-      <button className="btn btn-dark full" type="submit">SAVE PRODUCT <ArrowRight size={16}/></button>
-    </form></section></div>}
+    <footer className="footer"><div className="footer-main"><div><a className="wordmark footer-logo" href="#">XIOWRICH<span>PARFUMS DE CARACTÈRE</span></a><p>Fragrance for the moments<br/>that make you, you.</p></div><div><h4>EXPLORE</h4><a href="#collection">Shop all</a><a href="#about">About us</a><a href="#ritual">The ritual</a><a href="#prints">Our Collection</a></div><div><h4>CLIENT CARE</h4><a href="#contact">Contact us</a><a href="#contact">Shipping & returns</a><a href="#contact">Privacy & terms</a><a href="/A4%20Prints.pdf" target="_blank" rel="noreferrer">Our Collection</a></div><div><h4>FOLLOW OUR SCENT</h4><a href="https://www.instagram.com/xiowrich/" target="_blank" rel="noreferrer"><Instagram size={16}/> @xiowrich</a></div></div><div className="footer-bottom" id="footer-policy"><span>© 2026 XIOWRICH. ALL RIGHTS RESERVED.</span><span>MADE WITH INTENTION · INDIA</span><span>PRICES IN INR</span></div></footer>
 
     {cartOpen && <div className="overlay" onMouseDown={e=>{if(e.target===e.currentTarget)setCartOpen(false)}}><aside className="cart-drawer"><div className="drawer-head"><div><div className="eyebrow">YOUR SELECTION</div><h2>Shopping bag <span>({cart.reduce((s,i)=>s+i.qty,0)})</span></h2></div><button className="icon-btn" onClick={()=>setCartOpen(false)}><X/></button></div>
       {cart.length===0?<div className="cart-empty"><ShoppingBag size={34}/><h3>Your bag is waiting.</h3><p>Find the scent that feels like you.</p><button className="btn btn-dark" onClick={()=>{setCartOpen(false);scrollShop()}}>EXPLORE FRAGRANCES</button></div>:<>
@@ -309,7 +193,7 @@ function App() {
     </aside></div>}
 
     {checkoutOpen && <div className="overlay checkout-overlay"><section className="checkout-modal"><div className="drawer-head"><div><div className="eyebrow">ALMOST YOURS</div><h2>{orderDone?'Order received':'Secure checkout'}</h2></div><button className="icon-btn" onClick={()=>{setCheckoutOpen(false);setOrderDone(false)}}><X/></button></div>
-      {orderDone?<div className="success-state"><CheckCircle2 size={46}/><h3>Thank you for choosing XIOWRICH.</h3><p>Your order has been recorded with <strong>{paymentMethod === 'cod' ? 'Cash on Delivery' : paymentMethod === 'card' ? 'Credit / Debit / ATM Card' : paymentMethod === 'phonepe' ? 'PhonePe' : paymentMethod === 'razorpay' ? 'Razorpay' : 'UPI'}.</strong></p><p className="order-id">Order ID: <strong>{placedOrderId}</strong></p><a className="btn btn-dark" href={`/track-order?order=${encodeURIComponent(placedOrderId)}`}>TRACK YOUR ORDER <ArrowRight size={16}/></a><button className="btn btn-light" onClick={()=>{setCheckoutOpen(false);setOrderDone(false)}}>CONTINUE EXPLORING</button></div>:<><div className="checkout-total"><span>Order total (incl. estimated shipping)</span><strong>{money(subtotal+(subtotal>=3000?0:99))}</strong></div><div className="checkout-items">{cart.map(item=><div className="checkout-item" key={item.id}><GalleryViewer item={item} className="checkout-gallery"/><div><h3>{item.name}</h3><p>{item.size} · Qty {item.qty}</p><strong>{money(item.price*item.qty)}</strong></div></div>)}</div>{paymentStep?<section className="payment-step"><div className="payment-step-heading"><div className="eyebrow">SECURE PAYMENT</div><h3>Choose how you&rsquo;d like to pay.</h3><p>Your order details are ready. Select a payment method to place your order.</p></div><fieldset className="payment-options"><legend>Payment method</legend><label className={paymentMethod === 'upi' ? 'selected' : ''}><input type="radio" name="paymentMethod" value="upi" checked={paymentMethod === 'upi'} onChange={e=>setPaymentMethod(e.target.value)}/><span><strong>UPI</strong><small>Google Pay, BHIM and other UPI apps</small></span></label><label className={paymentMethod === 'phonepe' ? 'selected' : ''}><input type="radio" name="paymentMethod" value="phonepe" checked={paymentMethod === 'phonepe'} onChange={e=>setPaymentMethod(e.target.value)}/><span><strong>PhonePe</strong><small>Pay securely with PhonePe</small></span></label><label className={paymentMethod === 'razorpay' ? 'selected' : ''}><input type="radio" name="paymentMethod" value="razorpay" checked={paymentMethod === 'razorpay'} onChange={e=>setPaymentMethod(e.target.value)}/><span><strong>Razorpay</strong><small>UPI, wallets and net banking</small></span></label><label className={paymentMethod === 'card' ? 'selected' : ''}><input type="radio" name="paymentMethod" value="card" checked={paymentMethod === 'card'} onChange={e=>setPaymentMethod(e.target.value)}/><span><strong>Credit / Debit / ATM Card</strong><small>Visa, Mastercard and RuPay</small></span></label><label className={paymentMethod === 'cod' ? 'selected' : ''}><input type="radio" name="paymentMethod" value="cod" checked={paymentMethod === 'cod'} onChange={e=>setPaymentMethod(e.target.value)}/><span><strong>Cash on Delivery</strong><small>Pay when your fragrance arrives</small></span></label></fieldset><div className="demo-notice">{paymentMethod === 'cod' ? 'Cash on Delivery selected. You will pay the delivery partner when your order arrives.' : ''}</div><div className="payment-step-actions"><button className="btn btn-light" type="button" onClick={()=>setPaymentStep(false)}>BACK TO DETAILS</button><button className="btn btn-dark" type="button" onClick={placeOrder}>{paymentMethod === 'cod' ? 'PLACE COD ORDER' : 'PLACE ORDER'} <ArrowRight size={16}/></button></div></section>:<form className="checkout-form" onSubmit={beginPayment}><label>Full name<input required value={customer.name} onChange={e=>setCustomer({...customer,name:e.target.value})} placeholder="Your full name"/></label><div className="form-pair"><label>Email address<input type="email" required value={email} onChange={e=>setEmail(e.target.value)} placeholder="you@example.com"/></label><label>Phone number<input required pattern="[0-9+() -]{8,16}" value={customer.phone} onChange={e=>setCustomer({...customer,phone:e.target.value})} placeholder="+91"/></label></div><label>Delivery address<textarea required rows="2" value={customer.address} onChange={e=>setCustomer({...customer,address:e.target.value})} placeholder="House number, street, area"/></label>      <div className="form-pair"><label>City<input required value={customer.city} onChange={e=>setCustomer({...customer,city:e.target.value})} placeholder="City"/></label><label>PIN code<input required pattern="[0-9]{6}" value={customer.pincode} onChange={e=>setCustomer({...customer,pincode:e.target.value})} placeholder="6-digit PIN"/></label></div><div className="demo-notice">After your details are saved, you&rsquo;ll choose UPI, PhonePe, Razorpay, card, or Cash on Delivery.</div><button className="btn btn-dark full" type="submit">CONTINUE TO PAYMENT <ArrowRight size={16}/></button></form>}</>}
+      {orderDone?<div className="success-state"><CheckCircle2 size={46}/><h3>Thank you for choosing XIOWRICH.</h3><p>Your demo order has been recorded. Payment is not collected in this starter build.</p><button className="btn btn-dark" onClick={()=>{setCheckoutOpen(false);setOrderDone(false)}}>CONTINUE EXPLORING</button></div>:<><div className="checkout-total"><span>Order total (incl. estimated shipping)</span><strong>{money(subtotal+(subtotal>=3000?0:99))}</strong></div><div className="checkout-items">{cart.map(item=><div className="checkout-item" key={item.id}><GalleryViewer item={item} className="checkout-gallery"/><div><h3>{item.name}</h3><p>{item.size} · Qty {item.qty}</p><strong>{money(item.price*item.qty)}</strong></div></div>)}</div><form className="checkout-form" onSubmit={placeOrder}><label>Full name<input required value={customer.name} onChange={e=>setCustomer({...customer,name:e.target.value})} placeholder="Your full name"/></label><div className="form-pair"><label>Email address<input type="email" required value={email} onChange={e=>setEmail(e.target.value)} placeholder="you@example.com"/></label><label>Phone number<input required pattern="[0-9+() -]{8,16}" value={customer.phone} onChange={e=>setCustomer({...customer,phone:e.target.value})} placeholder="+91"/></label></div><label>Delivery address<textarea required rows="2" value={customer.address} onChange={e=>setCustomer({...customer,address:e.target.value})} placeholder="House number, street, area"/></label><div className="form-pair"><label>City<input required value={customer.city} onChange={e=>setCustomer({...customer,city:e.target.value})} placeholder="City"/></label><label>PIN code<input required pattern="[0-9]{6}" value={customer.pincode} onChange={e=>setCustomer({...customer,pincode:e.target.value})} placeholder="6-digit PIN"/></label></div><div className="demo-notice">Demo checkout: this records an order but does not charge a payment method. Razorpay activation requires merchant credentials and payment verification.</div><button className="btn btn-dark full" type="submit">PLACE DEMO ORDER <ArrowRight size={16}/></button></form></>}
     </section></div>}
     {notice && <div className="toast"><CheckCircle2 size={17}/>{notice}</div>}
   </div>

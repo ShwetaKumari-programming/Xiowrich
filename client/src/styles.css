@@ -26,7 +26,7 @@
 @media(max-width:600px){.collection-section{padding:55px 15px}.perfume-gallery{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.perfume-card{padding:7px}.perfume-card img{height:125px}.collection-add{padding:10px 4px;font-size:7px;letter-spacing:.4px;gap:4px}.collection-add svg{width:12px;height:12px}}
 
 /* Velour images in bag and checkout */
-.collection-add{margin-top:14px;width:100%}
+.perfume-card-name{font:22px var(--serif);font-weight:400;color:var(--ink);margin:14px 0 0;text-align:center}.perfume-card-prices{display:flex;align-items:center;gap:8px;margin-top:7px;font-size:12px}.perfume-card-prices span{text-decoration:line-through;color:#9a8b7b}.perfume-card-prices strong{color:var(--ink);font-weight:700}.collection-add{margin-top:12px;width:100%}@media(max-width:600px){.perfume-card-name{font-size:12px;margin-top:8px;white-space:nowrap}.perfume-card-prices{font-size:9px;gap:4px;margin-top:5px}}
 .item-gallery{position:relative;min-width:0;background:#eee5d7;overflow:hidden}
 .item-gallery>img{display:block;width:100%;height:100%;object-fit:contain}
 .cart-gallery{width:82px;height:100px}
