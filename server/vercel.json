@@ -1,5 +1,4 @@
 {
-  "buildCommand": "npm run build",
   "installCommand": "npm install",
   "builds": [
     { "src": "api/[...path].js", "use": "@vercel/node" },
