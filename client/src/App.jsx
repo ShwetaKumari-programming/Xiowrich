@@ -25,11 +25,16 @@ perfumeImages.push({ id: 9, name: 'Coco Noir', image: '/products/coco-noir-bottl
 perfumeImages.push({ id: 10, name: 'Lady Boss', image: '/products/lady-boss-bottle.png' })
 perfumeImages.push({ id: 11, name: 'First Kiss', image: '/products/first-kiss-bottle.png' })
 perfumeImages.push({ id: 12, name: 'XIOWRICH Origin', image: '/products/origin-bottle.png' })
-const velourGallery = ['/products/velour-poster.png', '/products/velour-features.png', '/products/velour-gift-set.png', '/products/velour-bottle.png']
+const velourGallery = ['/products/velour-bottle.png', '/products/velour-poster.png', '/products/velour-features.png', '/products/velour-gift-set.png']
 const darkRomanceGallery = ['/products/dark-romance-bottle.png', '/products/dark-romance-features.png', '/products/dark-romance-notes.png', '/products/dark-romance-gift-set.png']
 const oneNightGallery = ['/products/one-night-bottle.png', '/products/one-night-notes.png', '/products/one-night-features.png', '/products/one-night-gift-set.png']
 const womenOfCultureGallery = ['/products/women-of-culture-bottle.png', '/products/women-of-culture-notes.png', '/products/women-of-culture-features.png', '/products/one-night-gift-set.png']
 const cocoNoirGallery = ['/products/coco-noir-bottle.png', '/products/coco-noir-notes.png', '/products/coco-noir-features.png', '/products/coco-noir-gift-set.png']
+const deadlyDuoGallery = ['/products/deadly-duo.jpeg', '/products/deadly-duo.jpeg', '/products/deadly-duo.jpeg', '/products/deadly-duo.jpeg']
+const manOfCultureGallery = ['/products/man-of-culture.jpeg', '/products/man-of-culture.jpeg', '/products/man-of-culture.jpeg', '/products/man-of-culture.jpeg']
+const firstKissGallery = ['/products/first-kiss-bottle.png', '/products/first-kiss-poster.png', '/products/first-kiss-features.png', '/products/first-kiss-gift-set.png']
+const ladyBossGallery = ['/products/lady-boss-bottle.png', '/products/lady-boss-poster.png', '/products/lady-boss-features.png', '/products/lady-boss-gift-set.png']
+const originGallery = ['/products/origin-bottle.png', '/products/origin-poster.png', '/products/origin-features.png', '/products/origin-gift-set.png']
 
 const products = [
   { id: 'deadly-duo', name: 'Deadly Duo', subtitle: 'The art of contrast', category: 'Unisex', price: 750, mrp: 1799, size: '50 ml', image: '/products/deadly-duo.jpeg', tone: 'black', notes: 'Black amber · Warm woods · Spice', description: 'A confident, magnetic fragrance made for evenings that linger.' },
@@ -48,11 +53,24 @@ products.find(product => product.id === 'dark-romance').galleryImages = darkRoma
 products.find(product => product.id === 'one-night').galleryImages = oneNightGallery
 products.find(product => product.id === 'women-of-culture').galleryImages = womenOfCultureGallery
 products.find(product => product.id === 'coco-noir').galleryImages = cocoNoirGallery
+products.find(product => product.id === 'deadly-duo').galleryImages = deadlyDuoGallery
+products.find(product => product.id === 'man-of-culture').galleryImages = manOfCultureGallery
+products.find(product => product.id === 'first-kiss').galleryImages = firstKissGallery
+products.find(product => product.id === 'lady-boss').galleryImages = ladyBossGallery
+products.find(product => product.id === 'origin').galleryImages = originGallery
 const printPages = [1, 2, 3, 4, 5, 6, 7, 8].map(number => ({
   number: String(number).padStart(2, '0'),
   image: `/a4-prints/page-${String(number).padStart(2, '0')}.jpg`,
 }))
 const money = n => new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(n)
+const PRICE_ADJUSTMENT = 199
+const getPricing = product => ({
+  mrp: product.mrp,
+  markedPrice: product.price + PRICE_ADJUSTMENT,
+  finalPrice: product.price,
+  savings: product.mrp - product.price,
+  discountPercent: Math.round(((product.mrp - product.price) / product.mrp) * 100),
+})
 
 function ContactPage() {
   return <section className="contact-page" id="contact">
@@ -73,6 +91,8 @@ function App() {
   const [galleryIndexes, setGalleryIndexes] = useState({})
   const [orderDone, setOrderDone] = useState(false)
   const [mobileMenu, setMobileMenu] = useState(false)
+  const [selectedProduct, setSelectedProduct] = useState(null)
+  const [selectedProductImage, setSelectedProductImage] = useState(0)
   const [contactPage, setContactPage] = useState(() => window.location.hash === '#contact')
   const [email, setEmail] = useState('')
   const [customer, setCustomer] = useState({ name: '', phone: '', address: '', city: '', pincode: '' })
@@ -107,6 +127,10 @@ function App() {
   }
   const changeQty = (id, amount) => saveCart(cart.map(item => item.id === id ? { ...item, qty: item.qty + amount } : item).filter(item => item.qty > 0))
   const moveGallery = (id, images, direction) => setGalleryIndexes(current => ({ ...current, [id]: ((current[id] || 0) + direction + images.length) % images.length }))
+  const openProduct = product => {
+    setSelectedProduct(product)
+    setSelectedProductImage(0)
+  }
   const GalleryViewer = ({ item, className = '' }) => {
     const images = item.galleryImages?.length ? item.galleryImages : products.find(product => product.id === item.id)?.galleryImages || [item.image]
     const index = galleryIndexes[item.id] || 0
@@ -163,14 +187,18 @@ function App() {
         </div>
 
         <div className="perfume-gallery">
-          {perfumeImages.map((perfume) => (
-            <div className="perfume-card" key={perfume.id}>
-              <img src={perfume.image} alt={perfume.name} loading="lazy" />
+          {perfumeImages.map((perfume) => {
+            const product = products.find(item => item.name === perfume.name)
+            return <div className="perfume-card" key={perfume.id} onClick={() => openProduct(product)}>
+              <button className="perfume-card-image" onClick={() => openProduct(product)} aria-label={`View ${perfume.name}`}>
+                <img src={perfume.image} alt={perfume.name} loading="lazy" />
+              </button>
               <h3 className="perfume-card-name">{perfume.name}</h3>
-              <div className="perfume-card-prices"><span>{money(products.find(product => product.name === perfume.name).mrp)}</span><strong>{money(products.find(product => product.name === perfume.name).price)}</strong></div>
-              <button className="btn btn-dark collection-add" onClick={() => addToCart(products.find(product => product.name === perfume.name))}>ADD TO CART <ShoppingBag size={15}/></button>
+              <div className="perfume-card-prices"><span>{money(product.mrp)}</span><del>{money(getPricing(product).markedPrice)}</del><strong>{money(getPricing(product).finalPrice)}</strong></div>
+              <small className="discount-label">{getPricing(product).discountPercent}% OFF · Save {money(getPricing(product).savings)}</small>
+              <button className="btn btn-dark collection-add" onClick={event => { event.stopPropagation(); addToCart(product) }}>ADD TO CART <ShoppingBag size={15}/></button>
             </div>
-          ))}
+          })}
         </div>
       </section>
 
@@ -194,6 +222,25 @@ function App() {
 
     {checkoutOpen && <div className="overlay checkout-overlay"><section className="checkout-modal"><div className="drawer-head"><div><div className="eyebrow">ALMOST YOURS</div><h2>{orderDone?'Order received':'Secure checkout'}</h2></div><button className="icon-btn" onClick={()=>{setCheckoutOpen(false);setOrderDone(false)}}><X/></button></div>
       {orderDone?<div className="success-state"><CheckCircle2 size={46}/><h3>Thank you for choosing XIOWRICH.</h3><p>Your demo order has been recorded. Payment is not collected in this starter build.</p><button className="btn btn-dark" onClick={()=>{setCheckoutOpen(false);setOrderDone(false)}}>CONTINUE EXPLORING</button></div>:<><div className="checkout-total"><span>Order total (incl. estimated shipping)</span><strong>{money(subtotal+(subtotal>=3000?0:99))}</strong></div><div className="checkout-items">{cart.map(item=><div className="checkout-item" key={item.id}><GalleryViewer item={item} className="checkout-gallery"/><div><h3>{item.name}</h3><p>{item.size} · Qty {item.qty}</p><strong>{money(item.price*item.qty)}</strong></div></div>)}</div><form className="checkout-form" onSubmit={placeOrder}><label>Full name<input required value={customer.name} onChange={e=>setCustomer({...customer,name:e.target.value})} placeholder="Your full name"/></label><div className="form-pair"><label>Email address<input type="email" required value={email} onChange={e=>setEmail(e.target.value)} placeholder="you@example.com"/></label><label>Phone number<input required pattern="[0-9+() -]{8,16}" value={customer.phone} onChange={e=>setCustomer({...customer,phone:e.target.value})} placeholder="+91"/></label></div><label>Delivery address<textarea required rows="2" value={customer.address} onChange={e=>setCustomer({...customer,address:e.target.value})} placeholder="House number, street, area"/></label><div className="form-pair"><label>City<input required value={customer.city} onChange={e=>setCustomer({...customer,city:e.target.value})} placeholder="City"/></label><label>PIN code<input required pattern="[0-9]{6}" value={customer.pincode} onChange={e=>setCustomer({...customer,pincode:e.target.value})} placeholder="6-digit PIN"/></label></div><div className="demo-notice">Demo checkout: this records an order but does not charge a payment method. Razorpay activation requires merchant credentials and payment verification.</div><button className="btn btn-dark full" type="submit">PLACE DEMO ORDER <ArrowRight size={16}/></button></form></>}
+    </section></div>}
+    {selectedProduct && <div className="overlay product-detail-overlay" onMouseDown={event => { if (event.target === event.currentTarget) setSelectedProduct(null) }}><section className="product-detail-modal" role="dialog" aria-modal="true" aria-labelledby="product-detail-title">
+      <button className="icon-btn product-detail-close" onClick={() => setSelectedProduct(null)} aria-label="Close product details"><X/></button>
+      <div className="product-detail-gallery">
+        <img className="product-detail-main-image" src={selectedProduct.galleryImages[selectedProductImage]} alt={`${selectedProduct.name} image ${selectedProductImage + 1} of 4`} />
+        <div className="product-detail-thumbnails">
+          {selectedProduct.galleryImages.map((image, index) => <button key={`${image}-${index}`} className={index === selectedProductImage ? 'active' : ''} onClick={() => setSelectedProductImage(index)} aria-label={`Show image ${index + 1}`}><img src={image} alt="" /></button>)}
+        </div>
+      </div>
+      <div className="product-detail-copy">
+        <div className="eyebrow">{selectedProduct.category} · {selectedProduct.size}</div>
+        <h2 id="product-detail-title">{selectedProduct.name}</h2>
+        <p className="product-detail-price"><del>{money(getPricing(selectedProduct).mrp)}</del> <span>{money(getPricing(selectedProduct).markedPrice)}</span> <strong>{money(getPricing(selectedProduct).finalPrice)}</strong></p>
+        <p className="discount-label">{getPricing(selectedProduct).discountPercent}% OFF · Save {money(getPricing(selectedProduct).savings)}</p>
+        <p className="product-detail-subtitle">{selectedProduct.subtitle}</p>
+        <p className="product-detail-description">{selectedProduct.description}</p>
+        <div className="product-detail-notes"><span>NOTES</span>{selectedProduct.notes}</div>
+        <div className="product-detail-actions"><button className="btn btn-dark" onClick={() => { addToCart(selectedProduct); setSelectedProduct(null) }}>ADD TO CART <ShoppingBag size={15}/></button><button className="btn btn-light" onClick={() => setSelectedProduct(null)}>CONTINUE SHOPPING</button></div>
+      </div>
     </section></div>}
     {notice && <div className="toast"><CheckCircle2 size={17}/>{notice}</div>}
   </div>
