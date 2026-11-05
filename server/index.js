@@ -1,11 +1,11 @@
-import express from 'express'
 import cors from 'cors'
 import dotenv from 'dotenv'
+import express from 'express'
 import mongoose from 'mongoose'
-import Razorpay from 'razorpay'
 import crypto from 'node:crypto'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
+import Razorpay from 'razorpay'
 
 dotenv.config()
 const app = express()
