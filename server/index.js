@@ -91,6 +91,25 @@ app.post('/api/orders', async (req, res) => {
   }
 })
 
+app.post('/api/orders/:id/payment', async (req, res) => {
+  const { paymentMethod } = req.body || {}
+  if (!['upi', 'phonepe', 'razorpay', 'card', 'cod'].includes(paymentMethod)) return res.status(400).json({ error: 'Please choose a valid payment method.' })
+  try {
+    if (dbConnected && mongoose.Types.ObjectId.isValid(req.params.id)) {
+      const order = await Order.findByIdAndUpdate(req.params.id, { paymentMethod }, { new: true }).lean()
+      if (!order) return res.status(404).json({ error: 'Order not found.' })
+      return res.json({ paymentMethod: order.paymentMethod })
+    }
+    const order = demoOrders.find(item => item._id === req.params.id)
+    if (!order) return res.status(404).json({ error: 'Order not found.' })
+    order.paymentMethod = paymentMethod
+    res.json({ paymentMethod: order.paymentMethod })
+  } catch (err) {
+    console.error(err)
+    res.status(500).json({ error: 'Unable to update payment method.' })
+  }
+})
+
 app.get('/api/orders/:id', async (req, res) => {
   try {
     const order = dbConnected && mongoose.Types.ObjectId.isValid(req.params.id)

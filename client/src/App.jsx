@@ -1,5 +1,6 @@
 import { ArrowRight, CheckCircle2, Instagram, Menu, Minus, Plus, Search, ShoppingBag, Sparkles, X } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
+import { API_BASE_URL } from './api'
 
 const perfumeImages = [
   {
@@ -90,11 +91,13 @@ function App() {
   const [checkoutOpen, setCheckoutOpen] = useState(false)
   const [galleryIndexes, setGalleryIndexes] = useState({})
   const [orderDone, setOrderDone] = useState(false)
+  const [orderId, setOrderId] = useState('')
   const [mobileMenu, setMobileMenu] = useState(false)
   const [selectedProduct, setSelectedProduct] = useState(null)
   const [selectedProductImage, setSelectedProductImage] = useState(0)
   const [contactPage, setContactPage] = useState(() => window.location.hash === '#contact')
   const [email, setEmail] = useState('')
+  const [paymentMethod, setPaymentMethodState] = useState('cod')
   const [customer, setCustomer] = useState({ name: '', phone: '', address: '', city: '', pincode: '' })
 
   useEffect(() => {
@@ -127,6 +130,17 @@ function App() {
   }
   const changeQty = (id, amount) => saveCart(cart.map(item => item.id === id ? { ...item, qty: item.qty + amount } : item).filter(item => item.qty > 0))
   const moveGallery = (id, images, direction) => setGalleryIndexes(current => ({ ...current, [id]: ((current[id] || 0) + direction + images.length) % images.length }))
+  const choosePaymentMethod = async method => {
+    setPaymentMethodState(method)
+    if (!orderId) return
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/orders/${encodeURIComponent(orderId)}/payment`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ paymentMethod: method }) })
+      if (!response.ok) setNotice('Could not save your payment choice. Please try again.')
+    } catch {
+      setNotice('Could not save your payment choice. Please try again.')
+    }
+    const setPaymentMethod = method => { choosePaymentMethod(method) }
+  }
   const openProduct = product => {
     setSelectedProduct(product)
     setSelectedProductImage(0)
@@ -144,15 +158,16 @@ function App() {
 
   async function placeOrder(e) {
     e.preventDefault()
-    const payload = { customer, email, items: cart.map(({ id, name, price, qty }) => ({ productId: id, name, price, quantity: qty })), subtotal, shipping: subtotal >= 3000 ? 0 : 99, total: subtotal + (subtotal >= 3000 ? 0 : 99) }
+    const payload = { customer, email, paymentMethod, items: cart.map(({ id, name, price, qty }) => ({ productId: id, name, price, quantity: qty })), subtotal, shipping: subtotal >= 3000 ? 0 : 99, total: subtotal + (subtotal >= 3000 ? 0 : 99) }
     try {
-      const response = await fetch('http://localhost:5000/api/orders', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) })
+      const response = await fetch(`${API_BASE_URL}/api/orders`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) })
       if (response.ok) {
+        const data = await response.json()
+        setOrderId(data.orderId)
         setOrderDone(true)
-        saveCart([])
       } else setNotice('Could not create your order. Please try again.')
     } catch {
-      setNotice('Start the backend with “npm run dev” to submit a demo order.')
+      setNotice('Unable to place your order. Please start the store with “npm run dev” and try again.')
       setTimeout(() => setNotice(''), 3500)
     }
   }
@@ -221,7 +236,7 @@ function App() {
     </aside></div>}
 
     {checkoutOpen && <div className="overlay checkout-overlay"><section className="checkout-modal"><div className="drawer-head"><div><div className="eyebrow">ALMOST YOURS</div><h2>{orderDone?'Order received':'Secure checkout'}</h2></div><button className="icon-btn" onClick={()=>{setCheckoutOpen(false);setOrderDone(false)}}><X/></button></div>
-      {orderDone?<div className="success-state"><CheckCircle2 size={46}/><h3>Thank you for choosing XIOWRICH.</h3><p>Your demo order has been recorded. Payment is not collected in this starter build.</p><button className="btn btn-dark" onClick={()=>{setCheckoutOpen(false);setOrderDone(false)}}>CONTINUE EXPLORING</button></div>:<><div className="checkout-total"><span>Order total (incl. estimated shipping)</span><strong>{money(subtotal+(subtotal>=3000?0:99))}</strong></div><div className="checkout-items">{cart.map(item=><div className="checkout-item" key={item.id}><GalleryViewer item={item} className="checkout-gallery"/><div><h3>{item.name}</h3><p>{item.size} · Qty {item.qty}</p><strong>{money(item.price*item.qty)}</strong></div></div>)}</div><form className="checkout-form" onSubmit={placeOrder}><label>Full name<input required value={customer.name} onChange={e=>setCustomer({...customer,name:e.target.value})} placeholder="Your full name"/></label><div className="form-pair"><label>Email address<input type="email" required value={email} onChange={e=>setEmail(e.target.value)} placeholder="you@example.com"/></label><label>Phone number<input required pattern="[0-9+() -]{8,16}" value={customer.phone} onChange={e=>setCustomer({...customer,phone:e.target.value})} placeholder="+91"/></label></div><label>Delivery address<textarea required rows="2" value={customer.address} onChange={e=>setCustomer({...customer,address:e.target.value})} placeholder="House number, street, area"/></label><div className="form-pair"><label>City<input required value={customer.city} onChange={e=>setCustomer({...customer,city:e.target.value})} placeholder="City"/></label><label>PIN code<input required pattern="[0-9]{6}" value={customer.pincode} onChange={e=>setCustomer({...customer,pincode:e.target.value})} placeholder="6-digit PIN"/></label></div><div className="demo-notice">Demo checkout: this records an order but does not charge a payment method. Razorpay activation requires merchant credentials and payment verification.</div><button className="btn btn-dark full" type="submit">PLACE DEMO ORDER <ArrowRight size={16}/></button></form></>}
+      {orderDone?<div className="success-state"><CheckCircle2 size={46}/><h3>Your order has been placed.</h3><p>Choose your payment option to continue.</p><fieldset className="payment-methods"><legend>PAYMENT METHOD</legend><label className={paymentMethod === 'upi' ? 'selected' : ''}>      <input type="radio" name="completedPaymentMethod" value="upi" checked={paymentMethod === 'upi'} onChange={e=>choosePaymentMethod(e.target.value)}/><span>UPI</span><small>Google Pay, PhonePe, Paytm</small></label><label className={paymentMethod === 'razorpay' ? 'selected' : ''}><input type="radio" name="completedPaymentMethod" value="razorpay" checked={paymentMethod === 'razorpay'} onChange={e=>setPaymentMethod(e.target.value)}/><span>Razorpay</span><small>UPI, cards and net banking</small></label><label className={paymentMethod === 'card' ? 'selected' : ''}><input type="radio" name="completedPaymentMethod" value="card" checked={paymentMethod === 'card'} onChange={e=>setPaymentMethod(e.target.value)}/><span>Card</span><small>Credit or debit card</small></label><label className={paymentMethod === 'cod' ? 'selected' : ''}><input type="radio" name="completedPaymentMethod" value="cod" checked={paymentMethod === 'cod'} onChange={e=>setPaymentMethod(e.target.value)}/><span>Cash on Delivery</span><small>Pay when your order arrives</small></label></fieldset><a className="btn btn-dark full" href={`/track-order?order=${encodeURIComponent(orderId)}`} onClick={()=>saveCart([])}>TRACK YOUR ORDER <ArrowRight size={16}/></a></div>:<><div className="checkout-total"><span>Order total (incl. estimated shipping)</span><strong>{money(subtotal+(subtotal>=3000?0:99))}</strong></div><div className="checkout-items">{cart.map(item=><div className="checkout-item" key={item.id}><GalleryViewer item={item} className="checkout-gallery"/><div><h3>{item.name}</h3><p>{item.size} · Qty {item.qty}</p><strong>{money(item.price*item.qty)}</strong></div></div>)}</div><form className="checkout-form" onSubmit={placeOrder}><label>Full name<input required value={customer.name} onChange={e=>setCustomer({...customer,name:e.target.value})} placeholder="Your full name"/></label><div className="form-pair"><label>Email address<input type="email" required value={email} onChange={e=>setEmail(e.target.value)} placeholder="you@example.com"/></label><label>Phone number<input required pattern="[0-9+() -]{8,16}" value={customer.phone} onChange={e=>setCustomer({...customer,phone:e.target.value})} placeholder="+91"/></label></div><label>Delivery address<textarea required rows="2" value={customer.address} onChange={e=>setCustomer({...customer,address:e.target.value})} placeholder="House number, street, area"/></label><div className="form-pair"><label>City<input required value={customer.city} onChange={e=>setCustomer({...customer,city:e.target.value})} placeholder="City"/></label><label>PIN code<input required pattern="[0-9]{6}" value={customer.pincode} onChange={e=>setCustomer({...customer,pincode:e.target.value})} placeholder="6-digit PIN"/></label></div><fieldset className="payment-methods"><legend>PAYMENT METHOD</legend><label className={paymentMethod === 'upi' ? 'selected' : ''}><input type="radio" name="paymentMethod" value="upi" checked={paymentMethod === 'upi'} onChange={e=>setPaymentMethod(e.target.value)}/><span>UPI</span><small>Google Pay, PhonePe, Paytm</small></label><label className={paymentMethod === 'razorpay' ? 'selected' : ''}><input type="radio" name="paymentMethod" value="razorpay" checked={paymentMethod === 'razorpay'} onChange={e=>setPaymentMethod(e.target.value)}/><span>Razorpay</span><small>UPI, cards and net banking</small></label><label className={paymentMethod === 'card' ? 'selected' : ''}><input type="radio" name="paymentMethod" value="card" checked={paymentMethod === 'card'} onChange={e=>setPaymentMethod(e.target.value)}/><span>Card</span><small>Credit or debit card</small></label><label className={paymentMethod === 'cod' ? 'selected' : ''}><input type="radio" name="paymentMethod" value="cod" checked={paymentMethod === 'cod'} onChange={e=>setPaymentMethod(e.target.value)}/><span>Cash on Delivery</span><small>Pay when your order arrives</small></label></fieldset><button className="btn btn-dark full" type="submit">PLACE ORDER <ArrowRight size={16}/></button></form></>}
     </section></div>}
     {selectedProduct && <div className="overlay product-detail-overlay" onMouseDown={event => { if (event.target === event.currentTarget) setSelectedProduct(null) }}><section className="product-detail-modal" role="dialog" aria-modal="true" aria-labelledby="product-detail-title">
       <button className="icon-btn product-detail-close" onClick={() => setSelectedProduct(null)} aria-label="Close product details"><X/></button>
