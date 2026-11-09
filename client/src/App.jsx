@@ -11,12 +11,12 @@ const perfumeImages = [
   {
     id: 4,
     name: "Deadly Duo",
-    image: "/products/deadly-duo.jpeg",
+    image: "/products/deadly-duo-main.png",
   },
   {
     id: 5,
     name: "Man of Culture",
-    image: "/products/man-of-culture.jpeg",
+    image: "/products/man-of-culture-main.png",
   },
 ]
 perfumeImages.push({ id: 6, name: 'Dark Romance', image: '/products/dark-romance-bottle.png' })
@@ -31,23 +31,23 @@ const darkRomanceGallery = ['/products/dark-romance-bottle.png', '/products/dark
 const oneNightGallery = ['/products/one-night-bottle.png', '/products/one-night-notes.png', '/products/one-night-features.png', '/products/one-night-gift-set.png']
 const womenOfCultureGallery = ['/products/women-of-culture-bottle.png', '/products/women-of-culture-notes.png', '/products/women-of-culture-features.png', '/products/one-night-gift-set.png']
 const cocoNoirGallery = ['/products/coco-noir-bottle.png', '/products/coco-noir-notes.png', '/products/coco-noir-features.png', '/products/coco-noir-gift-set.png']
-const deadlyDuoGallery = ['/products/deadly-duo.jpeg', '/products/deadly-duo.jpeg', '/products/deadly-duo.jpeg', '/products/deadly-duo.jpeg']
-const manOfCultureGallery = ['/products/man-of-culture.jpeg', '/products/man-of-culture.jpeg', '/products/man-of-culture.jpeg', '/products/man-of-culture.jpeg']
+const deadlyDuoGallery = ['/products/deadly-duo-main.png', '/products/deadly-duo-notes.png', '/products/deadly-duo-features.png', '/products/deadly-duo-gift-set.png']
+const manOfCultureGallery = ['/products/man-of-culture-main.png', '/products/man-of-culture-notes.png', '/products/man-of-culture-features.png', '/products/man-of-culture-gift-set.png']
 const firstKissGallery = ['/products/first-kiss-bottle.png', '/products/first-kiss-poster.png', '/products/first-kiss-features.png', '/products/first-kiss-gift-set.png']
 const ladyBossGallery = ['/products/lady-boss-bottle.png', '/products/lady-boss-poster.png', '/products/lady-boss-features.png', '/products/lady-boss-gift-set.png']
 const originGallery = ['/products/origin-bottle.png', '/products/origin-poster.png', '/products/origin-features.png', '/products/origin-gift-set.png']
 
 const products = [
-  { id: 'deadly-duo', name: 'Deadly Duo', subtitle: 'The art of contrast', category: 'Unisex', price: 750, mrp: 1799, rate: 949, size: '50 ml', image: '/products/deadly-duo.jpeg', tone: 'black', notes: 'Black amber · Warm woods · Spice', description: 'A confident, magnetic fragrance made for evenings that linger.' },
-  { id: 'velour', name: 'Velour', subtitle: 'Softness with a signature', category: 'Women', price: 600, mrp: 1799, rate: 799, size: '50 ml', image: '/products/velour.jpeg', tone: 'pink', notes: 'Petals · Rose musk · Vanilla', description: 'A soft, modern floral scent with a warm, velvety finish.' },
-  { id: 'women-of-culture', name: 'Women of Culture', subtitle: 'Grace, unapologetically', category: 'Women', price: 800, mrp: 1799, rate: 999, size: '50 ml', image: '/products/women-of-culture-bottle.png', tone: 'rose', notes: 'Saffron · Jasmine · Amberwood', description: 'A floral signature celebrating individuality, poise and presence.' },
-  { id: 'coco-noir', name: 'Coco Noir', subtitle: 'Deep. Warm. Unforgettable.', category: 'Unisex', price: 650, mrp: 1799, rate: 849, size: '50 ml', image: '/products/coco-noir-bottle.png', tone: 'brown', notes: 'Milk chocolate · White musk · Cinnamon', description: 'A rich, enveloping scent inspired by the warmth of milk chocolate, white musk and cinnamon.' },
-  { id: 'man-of-culture', name: 'Man of Culture', subtitle: 'Quiet confidence', category: 'Men', price: 750, mrp: 1799, rate: 949, size: '50 ml', image: '/products/man-of-culture.jpeg', tone: 'burgundy', notes: 'Spiced woods · Amber · Musk', description: 'Refined and composed, with a bold trail that speaks without shouting.' },
-  { id: 'dark-romance', name: 'Dark Romance', subtitle: 'A little mystery, beautifully worn', category: 'Unisex', price: 700, mrp: 1799, rate: 899, size: '50 ml', image: '/products/dark-romance-bottle.png', tone: 'brown', notes: 'Bergamot · Iris · Patchouli', description: 'A warm, sensual signature with bright bergamot, elegant iris and deep patchouli.' },
-  { id: 'one-night', name: 'One Night', subtitle: 'One night. A lasting impression.', category: 'Unisex', price: 700, mrp: 1799, rate: 899, size: '50 ml', image: '/products/one-night-bottle.png', tone: 'brown', notes: 'Bergamot · Marine notes · White musk', description: 'A fresh, captivating fragrance that pairs bright bergamot with marine notes and soft white musk.' },
-  { id: 'lady-boss', name: 'Lady Boss', subtitle: 'The art of feminine elegance', category: 'Women', price: 600, mrp: 1799, rate: 799, size: '50 ml', image: '/products/lady-boss-bottle.png', tone: 'pink', notes: 'Blackcurrant · Freesia · Ambroxan', description: 'A polished feminine fragrance with luminous florals, rich blackcurrant and a confident modern trail.' },
-  { id: 'first-kiss', name: 'First Kiss', subtitle: 'A memory in the making', category: 'Unisex', price: 700, mrp: 1799, rate: 899, size: '50 ml', image: '/products/first-kiss-bottle.png', tone: 'brown', notes: 'Dubai oud · Turkish rose · Saffron', description: 'A romantic, enveloping fragrance where precious oud meets Turkish rose and luminous saffron.' },
-  { id: 'origin', name: 'XIOWRICH Origin', subtitle: 'Some origins are forever', category: 'Unisex', price: 750, mrp: 1799, rate: 949, size: '50 ml', image: '/products/origin-bottle.png', tone: 'brown', notes: 'Amber · Sandalwood · Rose', description: 'A warm, lasting signature with amber, sandalwood and rose.' },
+  { id: 'deadly-duo', name: 'Deadly Duo', subtitle: 'The art of contrast', category: 'Unisex', price: 949, mrp: 1799, rate: 949, size: '50 ml', image: '/products/deadly-duo-main.png', tone: 'black', notes: 'Black amber · Warm woods · Spice', description: 'A confident, magnetic fragrance made for evenings that linger.' },
+  { id: 'velour', name: 'Velour', subtitle: 'Softness with a signature', category: 'Women', price: 799, mrp: 1799, rate: 799, size: '50 ml', image: '/products/velour.jpeg', tone: 'pink', notes: 'Petals · Rose musk · Vanilla', description: 'A soft, modern floral scent with a warm, velvety finish.' },
+  { id: 'women-of-culture', name: 'Women of Culture', subtitle: 'Grace, unapologetically', category: 'Women', price: 999, mrp: 1799, rate: 999, size: '50 ml', image: '/products/women-of-culture-bottle.png', tone: 'rose', notes: 'Saffron · Jasmine · Amberwood', description: 'A floral signature celebrating individuality, poise and presence.' },
+  { id: 'coco-noir', name: 'Coco Noir', subtitle: 'Deep. Warm. Unforgettable.', category: 'Unisex', price: 849, mrp: 1799, rate: 849, size: '50 ml', image: '/products/coco-noir-bottle.png', tone: 'brown', notes: 'Milk chocolate · White musk · Cinnamon', description: 'A rich, enveloping scent inspired by the warmth of milk chocolate, white musk and cinnamon.' },
+  { id: 'man-of-culture', name: 'Man of Culture', subtitle: 'Quiet confidence', category: 'Men', price: 949, mrp: 1799, rate: 949, size: '50 ml', image: '/products/man-of-culture-main.png', tone: 'burgundy', notes: 'Lemongrass · Cardamom · Tobacco', description: 'Refined and composed, with a bold trail that speaks without shouting.' },
+  { id: 'dark-romance', name: 'Dark Romance', subtitle: 'A little mystery, beautifully worn', category: 'Unisex', price: 899, mrp: 1799, rate: 899, size: '50 ml', image: '/products/dark-romance-bottle.png', tone: 'brown', notes: 'Bergamot · Iris · Patchouli', description: 'A warm, sensual signature with bright bergamot, elegant iris and deep patchouli.' },
+  { id: 'one-night', name: 'One Night', subtitle: 'One night. A lasting impression.', category: 'Unisex', price: 899, mrp: 1799, rate: 899, size: '50 ml', image: '/products/one-night-bottle.png', tone: 'brown', notes: 'Bergamot · Marine notes · White musk', description: 'A fresh, captivating fragrance that pairs bright bergamot with marine notes and soft white musk.' },
+  { id: 'lady-boss', name: 'Lady Boss', subtitle: 'The art of feminine elegance', category: 'Women', price: 799, mrp: 1799, rate: 799, size: '50 ml', image: '/products/lady-boss-bottle.png', tone: 'pink', notes: 'Blackcurrant · Freesia · Ambroxan', description: 'A polished feminine fragrance with luminous florals, rich blackcurrant and a confident modern trail.' },
+  { id: 'first-kiss', name: 'First Kiss', subtitle: 'A memory in the making', category: 'Unisex', price: 899, mrp: 1799, rate: 899, size: '50 ml', image: '/products/first-kiss-bottle.png', tone: 'brown', notes: 'Dubai oud · Turkish rose · Saffron', description: 'A romantic, enveloping fragrance where precious oud meets Turkish rose and luminous saffron.' },
+  { id: 'origin', name: 'XIOWRICH Origin', subtitle: 'Some origins are forever', category: 'Unisex', price: 949, mrp: 1799, rate: 949, size: '50 ml', image: '/products/origin-bottle.png', tone: 'brown', notes: 'Amber · Sandalwood · Rose', description: 'A warm, lasting signature with amber, sandalwood and rose.' },
 ]
 products.find(product => product.id === 'velour').galleryImages = velourGallery
 products.find(product => product.id === 'dark-romance').galleryImages = darkRomanceGallery
@@ -62,14 +62,14 @@ products.find(product => product.id === 'origin').galleryImages = originGallery
 const printPages = [1, 2, 3, 4, 5, 6, 7, 8].map(number => ({
   number: String(number).padStart(2, '0'),
   image: `/a4-prints/page-${String(number).padStart(2, '0')}.jpg`,
-}))
+})).concat(
+  { number: '09', image: '/a4-prints/91.png' },
+  { number: '10', image: '/a4-prints/90.png' },
+)
 const money = n => new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(n)
 const getPricing = product => ({
   mrp: product.mrp,
-  markedPrice: product.rate,
-  finalPrice: product.price,
-  savings: product.mrp - product.price,
-  discountPercent: Math.round(((product.mrp - product.price) / product.mrp) * 100),
+  finalPrice: product.rate,
 })
 
 function ContactPage() {
@@ -208,8 +208,7 @@ function App() {
                 <img src={perfume.image} alt={perfume.name} loading="lazy" />
               </button>
               <h3 className="perfume-card-name">{perfume.name}</h3>
-              <div className="perfume-card-prices"><span>{money(product.mrp)}</span><del>{money(getPricing(product).markedPrice)}</del><strong>{money(getPricing(product).finalPrice)}</strong></div>
-              <small className="discount-label">{getPricing(product).discountPercent}% OFF · Save {money(getPricing(product).savings)}</small>
+              <div className="perfume-card-prices"><del>{money(getPricing(product).mrp)}</del><strong>{money(getPricing(product).finalPrice)}</strong></div>
               <button className="btn btn-dark collection-add" onClick={event => { event.stopPropagation(); addToCart(product) }}>ADD TO CART <ShoppingBag size={15}/></button>
             </div>
           })}
@@ -248,8 +247,7 @@ function App() {
       <div className="product-detail-copy">
         <div className="eyebrow">{selectedProduct.category} · {selectedProduct.size}</div>
         <h2 id="product-detail-title">{selectedProduct.name}</h2>
-        <p className="product-detail-price"><del>{money(getPricing(selectedProduct).mrp)}</del> <span>{money(getPricing(selectedProduct).markedPrice)}</span> <strong>{money(getPricing(selectedProduct).finalPrice)}</strong></p>
-        <p className="discount-label">{getPricing(selectedProduct).discountPercent}% OFF · Save {money(getPricing(selectedProduct).savings)}</p>
+        <p className="product-detail-price"><del>{money(getPricing(selectedProduct).mrp)}</del> <strong>{money(getPricing(selectedProduct).finalPrice)}</strong></p>
         <p className="product-detail-subtitle">{selectedProduct.subtitle}</p>
         <p className="product-detail-description">{selectedProduct.description}</p>
         <div className="product-detail-notes"><span>NOTES</span>{selectedProduct.notes}</div>
